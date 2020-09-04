@@ -1,8 +1,0 @@
-$dokka.format:html
-$dokka.linkExtension:html
-
-com.gitlab.kordlib.gateway
-com.gitlab.kordlib.gateway.builder
-com.gitlab.kordlib.gateway.handler
-com.gitlab.kordlib.gateway.retry
-
