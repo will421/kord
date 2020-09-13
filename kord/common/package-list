@@ -1,0 +1,8 @@
+$dokka.format:html
+$dokka.linkExtension:html
+
+com.gitlab.kordlib.common.annotation
+com.gitlab.kordlib.common.entity
+com.gitlab.kordlib.common.exception
+com.gitlab.kordlib.common.ratelimit
+
