@@ -1,7 +1,0 @@
-$dokka.format:html-v1
-$dokka.linkExtension:html
-
-dev.kord.gateway
-dev.kord.gateway.builder
-dev.kord.gateway.retry
-
