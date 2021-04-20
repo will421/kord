@@ -1,7 +1,7 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 
-com.gitlab.kordlib.gateway
-com.gitlab.kordlib.gateway.builder
-com.gitlab.kordlib.gateway.retry
+dev.kord.gateway
+dev.kord.gateway.builder
+dev.kord.gateway.retry
 
