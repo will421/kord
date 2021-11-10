@@ -436,15 +436,14 @@ public interface GuildBehavior : KordEntity, Strategizable {
 
     /**
      * Requests to get the [GuildChannel] represented by the [channelId],
-     * returns null if the [GuildChannel] isn't present.
+     * returns null if the [GuildChannel] isn't present in this guild.
      *
      * @throws [RequestException] if anything went wrong during the request.
      * @throws [ClassCastException] if the channel is not a [TopGuildChannel].
-     * @throws [IllegalArgumentException] if the channel is not part of this guild.
      */
     public suspend fun getChannelOrNull(channelId: Snowflake): GuildChannel? {
-        val channel = supplier.getChannelOfOrNull<GuildChannel>(channelId) ?: return null
-        require(channel.guildId == this.id) { "channel ${channelId.value} is not in guild ${this.id}" }
+        val channel = supplier.getChannelOfOrNull<GuildChannel>(channelId)
+        if(channel == null || channel.guildId != id) return null
         return channel
     }
 
@@ -932,11 +931,11 @@ public suspend inline fun <reified T : GuildChannel> GuildBehavior.getChannelOf(
  *
  * @throws [RequestException] if anything went wrong during the request.
  * @throws [ClassCastException] if the channel is not of type [T].
- * @throws [IllegalArgumentException] if the channel is not part of this guild.
  */
 public suspend inline fun <reified T : GuildChannel> GuildBehavior.getChannelOfOrNull(channelId: Snowflake): T? {
-    val channel = supplier.getChannelOfOrNull<T>(channelId) ?: return null
-    require(channel.guildId == this.id) { "channel ${channelId.value} is not in guild ${this.id}" }
+    val channel = supplier.getChannelOfOrNull<T>(channelId)
+
+    if(channel == null || channel.guildId != id) return null
     return channel
 }
 
