@@ -10,19 +10,34 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-class RestClient(requestHandler: RequestHandler) : RestService(requestHandler) {
-    val auditLog: AuditLogService = AuditLogService(requestHandler)
-    val channel: ChannelService = ChannelService(requestHandler)
-    val emoji: EmojiService = EmojiService(requestHandler)
-    val guild: GuildService = GuildService(requestHandler)
-    val invite: InviteService = InviteService(requestHandler)
-    val user: UserService = UserService(requestHandler)
-    val voice: VoiceService = VoiceService(requestHandler)
-    val webhook: WebhookService = WebhookService(requestHandler)
-    val application: ApplicationService = ApplicationService(requestHandler)
-    val template: TemplateService = TemplateService(requestHandler)
-    val interaction: InteractionService = InteractionService(requestHandler)
-    val stageInstance: StageInstanceService = StageInstanceService(requestHandler)
+class Services(
+    val auditLog: DefaultAuditLogService,
+    val channel: DefaultChannelService,
+    val emoji: DefaultEmojiService,
+    val guild: DefaultGuildService,
+    val invite: DefaultInviteService,
+    val user: DefaultUserService,
+    val voice: VoiceService,
+    val webhook: WebhookService,
+    val application: DefaultApplicationService,
+    val template: DefaultTemplateService,
+    val interaction: DefaultInteractionService,
+    val stageInstance: DefaultStageInstanceService
+)
+
+class RestClient(requestHandler: RequestHandler, services: Services) : RestService(requestHandler) {
+    val auditLog: DefaultAuditLogService = services.auditLog
+    val channel: DefaultChannelService = services.channel
+    val emoji: DefaultEmojiService = services.emoji
+    val guild: DefaultGuildService = services.guild
+    val invite: DefaultInviteService = services.invite
+    val user: DefaultUserService = services.user
+    val voice: VoiceService = services.voice
+    val webhook: WebhookService = services.webhook
+    val application: DefaultApplicationService = services.application
+    val template: DefaultTemplateService = services.template
+    val interaction: DefaultInteractionService = services.interaction
+    val stageInstance: DefaultStageInstanceService = services.stageInstance
 
     /**
      * Sends a request to the given [route]. This function exposes a direct call to the Discord api and allows
@@ -46,7 +61,7 @@ class RestClient(requestHandler: RequestHandler) : RestService(requestHandler) {
     }
 }
 
-fun RestClient(token: String): RestClient {
+fun RestClient(token: String, services: Services): RestClient {
     val requestHandler = KtorRequestHandler(token)
-    return RestClient(requestHandler)
+    return RestClient(requestHandler, services)
 }

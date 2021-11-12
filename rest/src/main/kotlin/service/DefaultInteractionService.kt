@@ -18,7 +18,7 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 
-class InteractionService(requestHandler: RequestHandler) : RestService(requestHandler) {
+class DefaultInteractionService(requestHandler: RequestHandler) : RestService(requestHandler) {
     suspend fun getGlobalApplicationCommands(applicationId: Snowflake): List<DiscordApplicationCommand> =
         call(Route.GlobalApplicationCommandsGet) {
             keys[Route.ApplicationId] = applicationId

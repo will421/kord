@@ -8,7 +8,7 @@ import dev.kord.rest.request.RequestHandler
 import dev.kord.rest.request.auditLogReason
 import dev.kord.rest.route.Route
 
-class StageInstanceService(requestHandler: RequestHandler) : RestService(requestHandler) {
+class DefaultStageInstanceService(requestHandler: RequestHandler) : RestService(requestHandler) {
     suspend fun getStageInstance(channelId: Snowflake): DiscordStageInstance = call(Route.StageInstanceGet) {
         keys[Route.ChannelId] = channelId
     }

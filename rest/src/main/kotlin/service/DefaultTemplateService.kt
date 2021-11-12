@@ -15,7 +15,7 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-class TemplateService(requestHandler: RequestHandler) : RestService(requestHandler) {
+class DefaultTemplateService(requestHandler: RequestHandler) : RestService(requestHandler) {
 
     /**
      * Returns a [DiscordTemplate] from the given code.

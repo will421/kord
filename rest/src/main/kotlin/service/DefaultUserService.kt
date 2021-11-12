@@ -15,7 +15,7 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-class UserService(requestHandler: RequestHandler) : RestService(requestHandler) {
+class DefaultUserService(requestHandler: RequestHandler) : RestService(requestHandler) {
 
     suspend fun getCurrentUser() = call(Route.CurrentUserGet)
 

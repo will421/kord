@@ -8,7 +8,7 @@ import dev.kord.rest.json.request.AuditLogGetRequest
 import dev.kord.rest.request.RequestHandler
 import dev.kord.rest.route.Route
 
-class AuditLogService(requestHandler: RequestHandler) : RestService(requestHandler) {
+class DefaultAuditLogService(requestHandler: RequestHandler) : RestService(requestHandler) {
 
     suspend inline fun getAuditLogs(
         guildId: Snowflake,

@@ -14,7 +14,7 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-class EmojiService(requestHandler: RequestHandler) : RestService(requestHandler) {
+class DefaultEmojiService(requestHandler: RequestHandler) : RestService(requestHandler) {
 
     @OptIn(ExperimentalContracts::class)
     suspend inline fun createEmoji(

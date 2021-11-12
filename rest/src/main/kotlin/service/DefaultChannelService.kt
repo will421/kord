@@ -19,7 +19,7 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-class ChannelService(requestHandler: RequestHandler) : RestService(requestHandler) {
+class DefaultChannelService(requestHandler: RequestHandler) : RestService(requestHandler) {
 
     suspend fun createMessage(channelId: Snowflake, multipartRequest: MultipartMessageCreateRequest): DiscordMessage {
 

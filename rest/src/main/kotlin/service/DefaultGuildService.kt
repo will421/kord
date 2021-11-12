@@ -22,7 +22,7 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-class GuildService(requestHandler: RequestHandler) : RestService(requestHandler) {
+class DefaultGuildService(requestHandler: RequestHandler) : RestService(requestHandler) {
 
     @OptIn(ExperimentalContracts::class)
     suspend inline fun createGuild(name: String, builder: GuildCreateBuilder.() -> Unit): DiscordGuild {
