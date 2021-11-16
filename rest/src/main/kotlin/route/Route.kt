@@ -756,6 +756,33 @@ sealed class Route<T>(
         ListThreadsResponse.serializer()
     )
 
+    object ScheduledGuildEventGet : Route<GuildScheduledEvent>(
+        HttpMethod.Get,
+        "/guilds/${GuildId}/scheduled-events/${ScheduledEventId}",
+        GuildScheduledEvent.serializer()
+    )
+
+
+    object ScheduledGuildEventPatch : Route<GuildScheduledEvent>(
+        HttpMethod.Patch,
+        "/guilds/${GuildId}/scheduled-events/${ScheduledEventId}",
+        GuildScheduledEvent.serializer()
+    )
+
+
+    object ScheduledGuildEventDelete : Route<Unit>(
+        HttpMethod.Delete,
+        "/guilds/${GuildId}/scheduled-events/${ScheduledEventId}",
+        NoStrategy
+    )
+
+
+
+    object ScheduledGuildEventUsersGet : Route<List<DiscordUser>>(
+        HttpMethod.Get,
+        "/guilds/${GuildId}/scheduled-events/${ScheduledEventId}/users",
+        ListSerializer(DiscordUser.serializer())
+    )
 
     companion object {
         val baseUrl = "https://discord.com/api/$restVersion"
@@ -782,6 +809,7 @@ sealed class Route<T>(
     object CommandId : Key("{command.id}", true)
     object InteractionId : Key("interaction.id", true)
     object InteractionToken : Key("{interaction.token}", true)
+    object ScheduledEventId: Key("{guild_scheduled_event.id}")
 
 }
 
