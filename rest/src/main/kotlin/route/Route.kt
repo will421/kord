@@ -2,7 +2,6 @@ package dev.kord.rest.route
 
 import dev.kord.common.annotation.DeprecatedSinceKord
 import dev.kord.common.annotation.KordExperimental
-import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.*
 import dev.kord.rest.json.response.*
 import io.ktor.http.*
@@ -756,17 +755,17 @@ sealed class Route<T>(
         ListThreadsResponse.serializer()
     )
 
-    object ScheduledGuildEventGet : Route<GuildScheduledEvent>(
+    object ScheduledGuildEventGet : Route<DiscordGuildScheduledEvent>(
         HttpMethod.Get,
         "/guilds/${GuildId}/scheduled-events/${ScheduledEventId}",
-        GuildScheduledEvent.serializer()
+        DiscordGuildScheduledEvent.serializer()
     )
 
 
-    object ScheduledGuildEventPatch : Route<GuildScheduledEvent>(
+    object ScheduledGuildEventPatch : Route<DiscordGuildScheduledEvent>(
         HttpMethod.Patch,
         "/guilds/${GuildId}/scheduled-events/${ScheduledEventId}",
-        GuildScheduledEvent.serializer()
+        DiscordGuildScheduledEvent.serializer()
     )
 
 

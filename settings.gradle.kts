@@ -47,7 +47,7 @@ fun VersionCatalogBuilder.cache() {
 }
 
 fun VersionCatalogBuilder.kotlinx() {
-    alias("kotlinx-datetime").to("org.jetbrains.kotlinx", "kotlinx-datetime").version("0.2.1")
+    alias("kotlinx-datetime").to("org.jetbrains.kotlinx", "kotlinx-datetime").version("0.3.1")
 }
 
 fun VersionCatalogBuilder.ktor() {

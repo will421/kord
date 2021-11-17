@@ -10,8 +10,8 @@ repositories {
 
 dependencies {
     // We currently cannot use Kotlin 1.5.31: https://github.com/kordlib/kord/issues/399
-    implementation(kotlin("gradle-plugin", version = "1.5.30"))
-    implementation(kotlin("serialization", version = "1.5.30"))
+    implementation(kotlin("gradle-plugin", version = "1.6.0"))
+    implementation(kotlin("serialization", version = "1.6.0"))
     implementation("org.jetbrains.dokka", "dokka-gradle-plugin", "1.5.0")
     implementation("org.jetbrains.kotlinx", "atomicfu-gradle-plugin", "0.16.3")
     implementation(gradleApi())

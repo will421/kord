@@ -90,6 +90,7 @@ data class DiscordOptionallyMemberUser(
     val premiumType: Optional<UserPremium> = Optional.Missing(),
     @SerialName("public_flags")
     val publicFlags: Optional<UserFlags> = Optional.Missing(),
+    @JsonNames("member", "guild_member")
     val member: Optional<DiscordGuildMember> = Optional.Missing(),
 )
 

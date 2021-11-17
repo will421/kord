@@ -13,7 +13,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 @Serializable
-data class GuildScheduledEvent(
+data class DiscordGuildScheduledEvent(
     val id: Snowflake,
     @SerialName("guild_name")
     val guildId: Snowflake?,
