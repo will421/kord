@@ -4,34 +4,13 @@ import dev.kord.common.annotation.KordExperimental
 import dev.kord.common.entity.optional.Optional
 import dev.kord.common.entity.optional.OptionalBoolean
 import dev.kord.common.entity.optional.OptionalSnowflake
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
+import dev.kord.common.entity.optional.value
+import kotlinx.serialization.*
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
-import kotlinx.serialization.descriptors.element
-import kotlinx.serialization.encoding.CompositeDecoder
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.encoding.decodeStructure
-import kotlinx.serialization.encoding.encodeStructure
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonDecoder
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.double
-import kotlinx.serialization.json.doubleOrNull
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.long
-import kotlinx.serialization.json.longOrNull
+import kotlinx.serialization.descriptors.*
+import kotlinx.serialization.encoding.*
+import kotlinx.serialization.json.*
 import mu.KotlinLogging
 
 val kordLogger = KotlinLogging.logger { }
@@ -537,6 +516,21 @@ sealed class CommandArgument<out T> : Option() {
         override fun toString(): String = "MentionableArgument(name=$name, value=$value)"
     }
 
+    /**
+     * Representation of a partial user input of an auto completed argument.
+     *
+     * @property name the name of the property
+     * @property type the type of the backing argument (not the type of [value] as the user can enter anything)
+     * @property value whatever the user already typed into the argument field
+     * @property focused always true, since this is an auto complete argument
+     */
+    class AutoCompleteArgument(
+        override val name: String,
+        override val type: ApplicationCommandOptionType,
+        override val value: String,
+        override val focused: OptionalBoolean
+    ) : CommandArgument<String>()
+
     internal object Serializer : KSerializer<CommandArgument<*>> {
 
         override val descriptor: SerialDescriptor = buildClassSerialDescriptor("kord.CommandArgument") {
@@ -588,35 +582,44 @@ sealed class CommandArgument<out T> : Option() {
             name: String,
             type: ApplicationCommandOptionType,
             focused: OptionalBoolean
-        ): CommandArgument<*> = when (type) {
-            ApplicationCommandOptionType.Boolean -> BooleanArgument(
-                name, json.decodeFromJsonElement(Boolean.serializer(), element), focused
-            )
-            ApplicationCommandOptionType.String -> StringArgument(
-                name, json.decodeFromJsonElement(String.serializer(), element), focused
-            )
-            ApplicationCommandOptionType.Integer -> IntegerArgument(
-                name, json.decodeFromJsonElement(Long.serializer(), element), focused
-            )
+        ): CommandArgument<*> {
+            // Discord allows the user to put anything into auto complete,
+            // so we cannot deserialize this with the expected type
+            if (focused.value == true) {
+                return AutoCompleteArgument(
+                    name, type, json.decodeFromJsonElement(String.serializer(), element), focused
+                )
+            }
+            return when (type) {
+                ApplicationCommandOptionType.Boolean -> BooleanArgument(
+                    name, json.decodeFromJsonElement(Boolean.serializer(), element), focused
+                )
+                ApplicationCommandOptionType.String -> StringArgument(
+                    name, json.decodeFromJsonElement(String.serializer(), element), focused
+                )
+                ApplicationCommandOptionType.Integer -> IntegerArgument(
+                    name, json.decodeFromJsonElement(Long.serializer(), element), focused
+                )
 
-            ApplicationCommandOptionType.Number -> NumberArgument(
-                name, json.decodeFromJsonElement(Double.serializer(), element), focused
-            )
-            ApplicationCommandOptionType.Channel -> ChannelArgument(
-                name, json.decodeFromJsonElement(Snowflake.serializer(), element), focused
-            )
-            ApplicationCommandOptionType.Mentionable -> MentionableArgument(
-                name, json.decodeFromJsonElement(Snowflake.serializer(), element), focused
-            )
-            ApplicationCommandOptionType.Role -> RoleArgument(
-                name, json.decodeFromJsonElement(Snowflake.serializer(), element), focused
-            )
-            ApplicationCommandOptionType.User -> UserArgument(
-                name, json.decodeFromJsonElement(Snowflake.serializer(), element), focused
-            )
-            ApplicationCommandOptionType.SubCommand,
-            ApplicationCommandOptionType.SubCommandGroup,
-            is ApplicationCommandOptionType.Unknown -> error("unknown CommandArgument type ${type.type}")
+                ApplicationCommandOptionType.Number -> NumberArgument(
+                    name, json.decodeFromJsonElement(Double.serializer(), element), focused
+                )
+                ApplicationCommandOptionType.Channel -> ChannelArgument(
+                    name, json.decodeFromJsonElement(Snowflake.serializer(), element), focused
+                )
+                ApplicationCommandOptionType.Mentionable -> MentionableArgument(
+                    name, json.decodeFromJsonElement(Snowflake.serializer(), element), focused
+                )
+                ApplicationCommandOptionType.Role -> RoleArgument(
+                    name, json.decodeFromJsonElement(Snowflake.serializer(), element), focused
+                )
+                ApplicationCommandOptionType.User -> UserArgument(
+                    name, json.decodeFromJsonElement(Snowflake.serializer(), element), focused
+                )
+                ApplicationCommandOptionType.SubCommand,
+                ApplicationCommandOptionType.SubCommandGroup,
+                is ApplicationCommandOptionType.Unknown -> error("unknown CommandArgument type ${type.type}")
+            }
         }
 
         override fun deserialize(decoder: Decoder): CommandArgument<*> {
